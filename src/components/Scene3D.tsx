@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Float, Text3D, Center, useTexture, Environment } from '@react-three/drei'
+import { OrbitControls, Float, Environment } from '@react-three/drei'
 import { Suspense, useRef } from 'react'
 import { motion } from 'framer-motion'
 import * as THREE from 'three'
@@ -55,10 +55,26 @@ function Crown({ position }: { position: [number, number, number] }) {
   )
 }
 
+function EmpressText({ position }: { position: [number, number, number] }) {
+  return (
+    <mesh position={position}>
+      <boxGeometry args={[3, 0.5, 0.2]} />
+      <meshStandardMaterial color="#8B5A7C" />
+    </mesh>
+  )
+}
+
 function Scene3DContent() {
   return (
     <>
-      <OrbitControls enableZoom={false} enablePan={false} />
+      <OrbitControls 
+        enableZoom={false} 
+        enablePan={false} 
+        autoRotate 
+        autoRotateSpeed={0.5}
+        maxPolarAngle={Math.PI / 2}
+        minPolarAngle={Math.PI / 3}
+      />
       <Environment preset="sunset" />
       
       <ambientLight intensity={0.5} />
@@ -69,26 +85,18 @@ function Scene3DContent() {
       <GiftBox position={[-3, 0, 0]} />
       <GiftBox position={[3, 0, 0]} />
       <GiftBox position={[0, 0, -3]} />
-      
-      <Center>
-        <Text3D
-          font="/fonts/playfair_display_regular.json"
-          size={0.5}
-          height={0.1}
-          position={[0, -2, 0]}
-        >
-          EMPRESS
-          <meshStandardMaterial color="#8B5A7C" />
-        </Text3D>
-      </Center>
+      <EmpressText position={[0, -2, 0]} />
     </>
   )
 }
 
 function Loading() {
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      <div className="text-empress-purple font-empress">Loading 3D Scene...</div>
+    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-empress-purple-light/20 to-empress-gold/20 rounded-3xl">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-empress-purple mx-auto mb-4"></div>
+        <div className="text-empress-purple font-empress text-lg">Loading 3D Scene...</div>
+      </div>
     </div>
   )
 }
@@ -96,16 +104,16 @@ function Loading() {
 export default function Scene3D() {
   return (
     <motion.div 
-      className="w-full h-full"
+      className="w-full h-full relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
-        <Suspense fallback={null}>
+      <Suspense fallback={<Loading />}>
+        <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
           <Scene3DContent />
-        </Suspense>
-      </Canvas>
+        </Canvas>
+      </Suspense>
     </motion.div>
   )
 }
