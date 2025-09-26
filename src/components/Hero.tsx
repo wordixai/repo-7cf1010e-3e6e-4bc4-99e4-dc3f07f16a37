@@ -1,25 +1,7 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
-import { Suspense, lazy } from 'react'
-
-// Lazy load the 3D scene to prevent initial loading issues
-const Scene3D = lazy(() => import('./Scene3D'))
-
-function Scene3DFallback() {
-  return (
-    <div className="h-96 lg:h-[600px] flex items-center justify-center bg-gradient-to-br from-empress-purple-light/20 to-empress-gold/20 rounded-3xl">
-      <div className="text-center">
-        <div className="animate-pulse mb-4">
-          <div className="w-24 h-24 bg-empress-purple/20 rounded-full mx-auto mb-4"></div>
-          <div className="w-32 h-4 bg-empress-purple/20 rounded mx-auto mb-2"></div>
-          <div className="w-24 h-4 bg-empress-purple/20 rounded mx-auto"></div>
-        </div>
-        <div className="text-empress-purple font-empress">Preparing 3D Experience...</div>
-      </div>
-    </div>
-  )
-}
+import Scene3D from './Scene3D'
 
 export default function Hero() {
   return (
@@ -114,9 +96,7 @@ export default function Hero() {
             transition={{ delay: 0.5, duration: 1 }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-transparent via-empress-gold/10 to-empress-purple/10 rounded-3xl" />
-            <Suspense fallback={<Scene3DFallback />}>
-              <Scene3D />
-            </Suspense>
+            <Scene3D />
           </motion.div>
         </div>
       </div>
